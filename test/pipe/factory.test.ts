@@ -14,9 +14,20 @@ describe('Pipe Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/foo/foo.pipe.ts`
+        filename === '/src/foo/foo.pipe.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/foo/foo.pipe.ts'))
+      .to.be.equal(
+      'import { PipeTransform, Pipe, ArgumentMetadata } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Pipe()\n' +
+      'export class FooPipe implements PipeTransform<any> {\n' +
+      '  async transform(value: any, metadata: ArgumentMetadata) {\n' +
+      '    return value;\n' +
+      '  }\n' +
+      '}\n'
+    );
   });
   it('should manage name as a path', () => {
     const options: PipeOptions = {
@@ -26,9 +37,20 @@ describe('Pipe Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/bar/foo/foo.pipe.ts`
+        filename === '/src/bar/foo/foo.pipe.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/bar/foo/foo.pipe.ts'))
+      .to.be.equal(
+      'import { PipeTransform, Pipe, ArgumentMetadata } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Pipe()\n' +
+      'export class FooPipe implements PipeTransform<any> {\n' +
+      '  async transform(value: any, metadata: ArgumentMetadata) {\n' +
+      '    return value;\n' +
+      '  }\n' +
+      '}\n'
+    );
   });
   it('should manage name and path', () => {
     const options: PipeOptions = {
@@ -39,9 +61,20 @@ describe('Pipe Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/baz/foo/foo.pipe.ts`
+        filename === '/src/baz/foo/foo.pipe.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/baz/foo/foo.pipe.ts'))
+      .to.be.equal(
+      'import { PipeTransform, Pipe, ArgumentMetadata } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Pipe()\n' +
+      'export class FooPipe implements PipeTransform<any> {\n' +
+      '  async transform(value: any, metadata: ArgumentMetadata) {\n' +
+      '    return value;\n' +
+      '  }\n' +
+      '}\n'
+    );
   });
   it('should manage name to dasherize', () => {
     const options: PipeOptions = {
@@ -51,9 +84,20 @@ describe('Pipe Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/foo-bar/foo-bar.pipe.ts`
+        filename === '/src/foo-bar/foo-bar.pipe.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/foo-bar/foo-bar.pipe.ts'))
+      .to.be.equal(
+      'import { PipeTransform, Pipe, ArgumentMetadata } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Pipe()\n' +
+      'export class FooBarPipe implements PipeTransform<any> {\n' +
+      '  async transform(value: any, metadata: ArgumentMetadata) {\n' +
+      '    return value;\n' +
+      '  }\n' +
+      '}\n'
+    );
   });
   it('should manage path to dasherize', () => {
     const options: PipeOptions = {
@@ -63,8 +107,19 @@ describe('Pipe Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/bar-baz/foo/foo.pipe.ts`
+        filename === '/src/bar-baz/foo/foo.pipe.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/bar-baz/foo/foo.pipe.ts'))
+      .to.be.equal(
+      'import { PipeTransform, Pipe, ArgumentMetadata } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Pipe()\n' +
+      'export class FooPipe implements PipeTransform<any> {\n' +
+      '  async transform(value: any, metadata: ArgumentMetadata) {\n' +
+      '    return value;\n' +
+      '  }\n' +
+      '}\n'
+    );
   });
 });
