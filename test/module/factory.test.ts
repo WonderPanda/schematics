@@ -6,7 +6,7 @@ import * as path from 'path';
 import { ApplicationOptions } from '../../src/application/schema';
 import { ModuleOptions } from '../../src/module/schema';
 
-describe.skip('Module Factory', () => {
+describe('Module Factory', () => {
   const runner: SchematicTestRunner = new SchematicTestRunner('.', path.join(process.cwd(), 'src/collection.json'));
   it('should manage name only', () => {
     const options: ModuleOptions = {
@@ -17,9 +17,16 @@ describe.skip('Module Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/foo/foo.module.ts`
+        filename === '/src/foo/foo.module.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/foo/foo.module.ts'))
+      .to.be.equal(
+      'import { Module } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Module({})\n' +
+      'export class FooModule {}\n'
+    );
   });
   it('should manage name as a path', () => {
     const options: ModuleOptions = {
@@ -30,9 +37,16 @@ describe.skip('Module Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/bar/foo/foo.module.ts`
+        filename === '/src/bar/foo/foo.module.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/bar/foo/foo.module.ts'))
+      .to.be.equal(
+      'import { Module } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Module({})\n' +
+      'export class FooModule {}\n'
+    );
   });
   it('should manage name and path', () => {
     const options: ModuleOptions = {
@@ -44,9 +58,16 @@ describe.skip('Module Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/bar/foo/foo.module.ts`
+        filename === '/src/bar/foo/foo.module.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/bar/foo/foo.module.ts'))
+      .to.be.equal(
+      'import { Module } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Module({})\n' +
+      'export class FooModule {}\n'
+    );
   });
   it('should manage name to dasherize', () => {
     const options: ModuleOptions = {
@@ -57,9 +78,16 @@ describe.skip('Module Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/foo-bar/foo-bar.module.ts`
+        filename === '/src/foo-bar/foo-bar.module.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/foo-bar/foo-bar.module.ts'))
+      .to.be.equal(
+      'import { Module } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Module({})\n' +
+      'export class FooBarModule {}\n'
+    );
   });
   it('should manage path to dasherize', () => {
     const options: ModuleOptions = {
@@ -70,9 +98,16 @@ describe.skip('Module Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/bar-baz/foo/foo.module.ts`
+        filename === '/src/bar-baz/foo/foo.module.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/bar-baz/foo/foo.module.ts'))
+      .to.be.equal(
+      'import { Module } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Module({})\n' +
+      'export class FooModule {}\n'
+    );
   });
   it('should manage declaration in app module', () => {
     const app: ApplicationOptions = {
@@ -88,6 +123,7 @@ describe.skip('Module Factory', () => {
     ).to.be.equal(
       'import { Module } from \'@nestjs/common\';\n' +
       'import { AppController } from \'./app.controller\';\n' +
+      'import { AppService } from \'./app.service\';\n' +
       'import { FooModule } from \'./foo/foo.module\';\n' +
       '\n' +
       '@Module({\n' +
@@ -97,9 +133,11 @@ describe.skip('Module Factory', () => {
       '  controllers: [\n' +
       '    AppController\n' +
       '  ],\n' +
-      '  components: []\n' +
+      '  providers: [\n' +
+      '    AppService\n' +
+      '  ]\n' +
       '})\n' +
-      'export class ApplicationModule {}\n'
+      'export class AppModule {}\n'
     );
   });
   it('should manage declaration in bar module', () => {
