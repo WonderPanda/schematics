@@ -6,8 +6,9 @@ import * as path from 'path';
 import { ApplicationOptions } from '../../src/application/schema';
 import { ControllerOptions } from '../../src/controller/schema';
 import { ModuleOptions } from '../../src/module/schema';
+import { AppService } from '../../src/application/files/src/app.service';
 
-describe.skip('Controller Factory', () => {
+describe('Controller Factory', () => {
   const runner: SchematicTestRunner = new SchematicTestRunner('.', path.join(process.cwd(), 'src/collection.json'));
   it('should manage name only', () => {
     const options: ControllerOptions = {
@@ -18,9 +19,16 @@ describe.skip('Controller Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/foo/foo.controller.ts`
+        filename === '/src/foo/foo.controller.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/foo/foo.controller.ts'))
+      .to.be.equal(
+      'import { Controller } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Controller()\n' +
+      'export class FooController {}\n'
+    );
   });
   it('should manage name as a path', () => {
     const options: ControllerOptions = {
@@ -31,9 +39,16 @@ describe.skip('Controller Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/bar/foo/foo.controller.ts`
+        filename === '/src/bar/foo/foo.controller.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/bar/foo/foo.controller.ts'))
+      .to.be.equal(
+      'import { Controller } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Controller()\n' +
+      'export class FooController {}\n'
+    );
   });
   it('should manage name and path', () => {
     const options: ControllerOptions = {
@@ -45,9 +60,16 @@ describe.skip('Controller Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/bar/foo/foo.controller.ts`
+        filename === '/src/bar/foo/foo.controller.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/bar/foo/foo.controller.ts'))
+      .to.be.equal(
+      'import { Controller } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Controller()\n' +
+      'export class FooController {}\n'
+    );
   });
   it('should manage name to dasherize', () => {
     const options: ControllerOptions = {
@@ -58,9 +80,16 @@ describe.skip('Controller Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/foo-bar/foo-bar.controller.ts`
+        filename === '/src/foo-bar/foo-bar.controller.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/foo-bar/foo-bar.controller.ts'))
+      .to.be.equal(
+      'import { Controller } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Controller()\n' +
+      'export class FooBarController {}\n'
+    );
   });
   it('should manage path to dasherize', () => {
     const options: ControllerOptions = {
@@ -71,9 +100,16 @@ describe.skip('Controller Factory', () => {
     const files: string[] = tree.files;
     expect(
       files.find((filename) =>
-        filename === `/src/bar-baz/foo/foo.controller.ts`
+        filename === '/src/bar-baz/foo/foo.controller.ts'
       )
     ).to.not.be.undefined;
+    expect(tree.readContent('/src/bar-baz/foo/foo.controller.ts'))
+      .to.be.equal(
+      'import { Controller } from \'@nestjs/common\';\n' +
+      '\n' +
+      '@Controller()\n' +
+      'export class FooController {}\n'
+    );
   });
   it('should manage declaration in app module', () => {
     const app: ApplicationOptions = {
@@ -89,6 +125,7 @@ describe.skip('Controller Factory', () => {
     ).to.be.equal(
       'import { Module } from \'@nestjs/common\';\n' +
       'import { AppController } from \'./app.controller\';\n' +
+      'import { AppService } from \'./app.service\';\n' +
       'import { FooController } from \'./foo/foo.controller\';\n' +
       '\n' +
       '@Module({\n' +
@@ -97,9 +134,11 @@ describe.skip('Controller Factory', () => {
       '    AppController,\n' +
       '    FooController\n' +
       '  ],\n' +
-      '  components: []\n' +
+      '  providers: [\n' +
+      '    AppService\n' +
+      '  ]\n' +
       '})\n' +
-      'export class ApplicationModule {}\n'
+      'export class AppModule {}\n'
     );
   });
   it('should manage declaration in foo module', () => {
